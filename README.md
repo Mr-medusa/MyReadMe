@@ -10,4 +10,4 @@
 
 ## 用法
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0701/024433_5527c372_1013340.png "MyReadMe02.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0701/024739_63be7508_1013340.png "MyReadMe02.png")
