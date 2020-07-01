@@ -1,5 +1,7 @@
 package red.medusa.readme;
 
+import red.medusa.readme.model.ReadMeFlag;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

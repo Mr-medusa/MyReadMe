@@ -5,6 +5,9 @@ import red.medusa.readme.model.Line;
 public class ReadMeExpert {
 
     public static Line build(Line line) {
+
+        createReadMeLine(new AnnotationCommand(line));
+
         switch (line.getOption()) {
             case NOTING:
                 return line;

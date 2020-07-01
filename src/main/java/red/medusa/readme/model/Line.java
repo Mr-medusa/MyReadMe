@@ -1,7 +1,10 @@
 package red.medusa.readme.model;
 
 public class Line {
+    private Line  annotation;
+    private Line pre;
     private static int num;
+    private int order = -1;
     private int selfNum = -1;
     private String moduleName;
     private String methodName;
@@ -13,6 +16,7 @@ public class Line {
     private String location;
     private String locationTitle;
     private String moduleMsg;
+    private String mark;
     private NewLineOption option = NewLineOption.NOTING;
 
     public Line() {
@@ -29,7 +33,7 @@ public class Line {
     }
 
     public Line modifyWithOldLine(Line param) {
-
+        this.setOrder(param.order);
         this.setModuleName(param.getModuleName());
         this.setMethodName(param.getMethodName());
         this.setNewLine(param.getNewLine());
@@ -166,6 +170,38 @@ public class Line {
         return this;
     }
 
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    public String getMark() {
+        return mark;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
+    }
+
+    public Line getAnnotation() {
+        return annotation;
+    }
+
+    public void setAnnotation(Line annotation) {
+        this.annotation = annotation;
+    }
+
+    public Line getPre() {
+        return pre;
+    }
+
+    public Line setPre(Line pre) {
+        this.pre = pre;
+        return this;
+    }
 
     @Override
     public String toString() {
@@ -179,6 +215,7 @@ public class Line {
                 ", moduleLevel=" + moduleLevel +
                 ", listLevel=" + listLevel +
                 ", location='" + location + '\'' +
+                ", order='" + order + '\'' +
                 ", locationTitle='" + locationTitle + '\'' +
                 ", moduleMsg='" + moduleMsg + '\'' +
                 ", option=" + option +

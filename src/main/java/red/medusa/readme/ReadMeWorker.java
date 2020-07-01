@@ -1,10 +1,7 @@
 package red.medusa.readme;
 
 import red.medusa.readme.command.ReadMeExpert;
-import red.medusa.readme.model.Line;
-import red.medusa.readme.model.MarkDownTag;
-import red.medusa.readme.model.NewLineOption;
-import red.medusa.readme.model.ReadMeParam;
+import red.medusa.readme.model.*;
 import red.medusa.readme.utils.PathUtils;
 
 import java.io.*;
@@ -20,18 +17,18 @@ public class ReadMeWorker {
     private ReadMeParam readMeParam;
 
     // 方法中构建的当前模块
-    private List<Line> methodLines = new ArrayList<>();
+    private static List<Line> methodLines = new ArrayList<>();
 
     // 文件中构建的
 //    private Map<ReadMeModule, List<Line>> lines = new LinkedHashMap<>();
 
-    private ReadMeModuleList moduleList = ReadMePool.getModuleList();
+    private ReadMeModuleList moduleList = ReadMeModuleList.getInstance();
 
     // 匹配文件中的模块名
-    private Pattern matchNameCompile = Pattern.compile("^#{1,5}\\u0020+.*$");
+    public static Pattern matchNameCompile = Pattern.compile("^#{1,5}\\u0020+.*$");
 
     // 匹配简单的模块名 (为了方便以文件路径当作模块名)
-    private Pattern matchSimpleNameCompile = Pattern.compile("^#{1,5}\\u0020\\[[\\w.]+]\\(([\\w./\\\\]+)\\u0020+.*\\)");
+    public static Pattern matchSimpleNameCompile = Pattern.compile("^#{1,5}\\u0020\\[[\\w.]+]\\(([\\w./\\\\]+)\\u0020+.*\\)");
 
     private String relativePath = "";
 
@@ -92,33 +89,33 @@ public class ReadMeWorker {
         ReadMeModule moduleKey = new ReadMeModule(MarkDownTag.SEPARATOR);
 
         try {
+
+            Line pre = null;
             for (String line : Files.lines(readMeParam.getREADME().toPath(), Charset.forName("UTF-8")).collect(Collectors.toList())) {
 
                 Line readMeLine = new Line(line, line).plusNum();
 
                 if (matchNameCompile.matcher(line).matches()) {                 // 是模块
                     readMeLine.setModule(true).setModuleName(line);
-
                     Matcher matcher = matchSimpleNameCompile.matcher(line);
-
                     if (matcher.find()) {
-
+                        // 添加模块名
                         String simpleModuleName = PathUtils.cleanPath(matcher.group(1));
+                        // 添加位置
                         readMeLine.setLocation(simpleModuleName);
 
                         moduleKey = new ReadMeModule(simpleModuleName);
                     }
                 }
-
-                moduleKey.addLine(readMeLine);
+                pre = readMeLine;
+                moduleKey.addLine(readMeLine.setPre(pre));
             }
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
+
 
     /**
      * 构造替换或添加标记
@@ -129,10 +126,12 @@ public class ReadMeWorker {
         ReadMeModule readMeModule = getCurrentModuleLines();
 
         // 调整排序
-        sortModule(readMeModule);
+//        sortModule(readMeModule);
 
         // 替换模块
-        readMeModule.getLines().get(0).modifyWithOldLine(currentModuleLine).setOption(NewLineOption.REPLACE).setModule(true);
+        Line currentModuleLine = readMeModule.getLines().get(0);
+
+        currentModuleLine.modifyWithOldLine(currentModuleLine).setOption(NewLineOption.REPLACE).setModule(true);
 
         /*
          * 在当前的模块看看哪些方法需要被替换
@@ -192,11 +191,11 @@ public class ReadMeWorker {
         }
     }
 
+
     /**
      * 生成ReadMe
      */
     public void parseReadMe() {
-
         try (PrintWriter p = new PrintWriter(
                 new BufferedWriter(
                         new OutputStreamWriter(new FileOutputStream(readMeParam.getREADME()), Charset.forName("UTF-8"))
@@ -208,8 +207,9 @@ public class ReadMeWorker {
                     System.out.println(line);
 
                     Line build = ReadMeExpert.build(line);
-
-//                    p.println(build.getNewLine());
+                    if (line.getAnnotation() != null)
+                        p.println(line.getAnnotation().getNewLine());
+                    p.println(build.getNewLine());
                 }
             }
             p.flush();
@@ -224,7 +224,6 @@ public class ReadMeWorker {
         execute();
     }
 
-
     public void execute() {
         // 准备参数
         preparedParams();
@@ -237,13 +236,6 @@ public class ReadMeWorker {
 
     }
 
-
-    public static void main(String[] args) {
-        ReadMeModule a = new ReadMeModule("A");
-        ReadMeModule b = new ReadMeModule("B");
-        ReadMeModule c = new ReadMeModule("C");
-
-    }
 }
 
 

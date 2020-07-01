@@ -2,7 +2,7 @@ package red.medusa.readme.model;
 
 public enum NewLineOption {
 
-    NOTING, REPLACE, INSERT;
+    NOTING, REPLACE, INSERT,NULL;
 
     private static int index;
     private static boolean stop;

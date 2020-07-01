@@ -1,20 +1,31 @@
-package red.medusa.readme;
-
-import red.medusa.readme.model.Line;
-import red.medusa.readme.model.MarkDownTag;
+package red.medusa.readme.model;
 
 import java.util.*;
 
 public class ReadMeModuleList implements Iterable<ReadMeModule> {
 
     private LinkedList<ReadMeModule> moduleList = new LinkedList<>();
+
     private Map<String, ReadMeModule> moduleMap = new LinkedHashMap<>(8);
+
+    private static class SingletonClassInstance{
+        private static final ReadMeModuleList instance=new ReadMeModuleList();
+    }
+
+    public static ReadMeModuleList getInstance(){
+        return SingletonClassInstance.instance;
+    }
+
+    private ReadMeModuleList() {
+        this.addModule(new ReadMeModule(MarkDownTag.SEPARATOR,false));
+    }
 
     public ReadMeModuleList addModule(ReadMeModule module) {
         this.moduleList.add(module);
         this.moduleMap.put(module.getModuleName(), module);
         return this;
     }
+
     public ReadMeModuleList removeModule(ReadMeModule module) {
         this.moduleList.remove(module);
         this.moduleMap.remove(module.getModuleName());
@@ -39,6 +50,10 @@ public class ReadMeModuleList implements Iterable<ReadMeModule> {
 
     public ReadMeModule get(ReadMeModule module) {
         return moduleMap.computeIfAbsent(module.getModuleName(), k -> new ReadMeModule(module.getModuleName()));
+    }
+
+    public int size() {
+        return moduleList.size();
     }
 
     @Override

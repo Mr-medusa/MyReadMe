@@ -1,6 +1,4 @@
-package red.medusa.readme;
-
-import red.medusa.readme.model.Line;
+package red.medusa.readme.model;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,15 +6,18 @@ import java.util.Objects;
 
 public class ReadMeModule {
 
+    private ReadMeModuleList readMeModules = ReadMeModuleList.getInstance();
+
     private List<Line> lines = new LinkedList<>();
 
     private String moduleName = "";
 
     public ReadMeModule(String moduleName) {
         this.moduleName = moduleName;
-        ReadMePool.getModuleList().addModule(this);
+        readMeModules.addModule(this);
     }
-    public ReadMeModule(String moduleName,boolean clean) {
+
+    public ReadMeModule(String moduleName,boolean option) {
         this.moduleName = moduleName;
     }
 
@@ -40,7 +41,7 @@ public class ReadMeModule {
     }
 
     public ReadMeModule dettach() {
-        ReadMePool.getModuleList().removeModule(this);
+        readMeModules.removeModule(this);
         return this;
     }
 
