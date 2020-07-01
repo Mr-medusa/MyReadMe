@@ -1,7 +1,7 @@
 package red.medusa.readme.model;
 
 public class Line {
-    private Line  annotation;
+    private Line annotation;
     private Line pre;
     private static int num;
     private int order = -1;
@@ -16,7 +16,7 @@ public class Line {
     private String location;
     private String locationTitle;
     private String moduleMsg;
-    private String mark;
+    private boolean isAnnotation;
     private NewLineOption option = NewLineOption.NOTING;
 
     public Line() {
@@ -33,7 +33,8 @@ public class Line {
     }
 
     public Line modifyWithOldLine(Line param) {
-        this.setOrder(param.order);
+
+        this.setOrder(param.getOrder());
         this.setModuleName(param.getModuleName());
         this.setMethodName(param.getMethodName());
         this.setNewLine(param.getNewLine());
@@ -174,24 +175,27 @@ public class Line {
         return order;
     }
 
-    public void setOrder(int order) {
-        this.order = order;
+    public Line setOrder(int order) {
+        if (order != -1)
+            this.order = order;
+        return this;
     }
 
-    public String getMark() {
-        return mark;
+    public boolean isAnnotation() {
+        return isAnnotation;
     }
 
-    public void setMark(String mark) {
-        this.mark = mark;
+    public void setAnnotation(boolean annotation) {
+        isAnnotation = annotation;
     }
 
     public Line getAnnotation() {
         return annotation;
     }
 
-    public void setAnnotation(Line annotation) {
+    public Line setAnnotation(Line annotation) {
         this.annotation = annotation;
+        return this;
     }
 
     public Line getPre() {
@@ -216,6 +220,7 @@ public class Line {
                 ", listLevel=" + listLevel +
                 ", location='" + location + '\'' +
                 ", order='" + order + '\'' +
+                ", isAnnotation='" + isAnnotation + '\'' +
                 ", locationTitle='" + locationTitle + '\'' +
                 ", moduleMsg='" + moduleMsg + '\'' +
                 ", option=" + option +

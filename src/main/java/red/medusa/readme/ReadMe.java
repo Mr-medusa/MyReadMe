@@ -16,6 +16,8 @@ public @interface ReadMe {
 
     String locTit() default "";
 
+    int order() default -1;
+
     int listLevel() default 0;
 
 }
