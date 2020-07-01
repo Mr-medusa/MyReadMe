@@ -4,7 +4,7 @@ import red.medusa.readme.AttachReadme;
 import red.medusa.readme.ClassReadMe;
 import red.medusa.readme.ReadMe;
 
-@ClassReadMe(value = "ReadMeTestModule4")
+@ClassReadMe(value = "ReadMeTestModule4",msg = "AAAAA")
 public class ReadMeTestModule4 extends AttachReadme {
 
     @ReadMe("test1")
@@ -12,7 +12,7 @@ public class ReadMeTestModule4 extends AttachReadme {
 
     }
 
-    @ReadMe(value = "test2")
+    @ReadMe(value = "test2", locTit="AAAAA")
     public void test2(){
 
     }

@@ -1,6 +1,12 @@
+<!-- type="moule" module_name="AAA"  order="1" mark="start"-->
+<!-- type = "class" tag = "title"-->
 ### [MainInDir](test/MainInDir.java "在test目录下若有readme则在里面创建") : 在test目录下若有readme则在里面创建
+<!-- type = "method" tag = "order_list#1" -->
 + [test3](test/MainInDir.java "") : test目录下的test3
 + [test4](test/MainInDir.java "这只是个title而已") : test目录下的test4
+<!-- type="moule" module_name="AAA"  order="1" mark="end"-->
+
+
 ### [MainInDir2](test/MainInDir2.java "在test目录下若有readme则在里面创建") : 在test目录下若有readme则在里面创建
 + [test6](test/MainInDir2.java "这只是个title而已") : test目录下的test6
 + [test5](test/MainInDir2.java "") : test目录下的test5
