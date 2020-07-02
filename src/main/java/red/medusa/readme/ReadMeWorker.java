@@ -316,9 +316,6 @@ public class ReadMeWorker {
     }
 
     private void execute() {
-
-        Log.enableDebug = false;
-
         // 准备参数
         preparedParams();
         // 建立数据集
@@ -329,7 +326,6 @@ public class ReadMeWorker {
         consultingExperts();
         // 写入数据
         parseReadMe(sortLines());
-
     }
 }
 

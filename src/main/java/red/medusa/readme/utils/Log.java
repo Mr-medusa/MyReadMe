@@ -19,20 +19,4 @@ public class Log {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.printf("%-5s", "ABCDEFG");
-        System.out.println();
-        System.out.printf("%-5s", "A");
-        System.out.println();
-
-        System.out.printf("%-5.1s", "ABCDEFG");
-        System.out.println();
-        System.out.printf("%-5.5s", "A");
-        System.out.println();
-
-        System.out.printf("%5.1s", "ABCDEFG");
-        System.out.println();
-        System.out.printf("%5.5s", "A");
-        System.out.println();
-    }
 }
