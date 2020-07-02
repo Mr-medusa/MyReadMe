@@ -5,12 +5,9 @@ import red.medusa.readme.model.Line;
 public class ReadMeExpert {
 
     public static Line build(Line line) {
-
-        createReadMeLine(new AnnotationCommand(line));
-
         switch (line.getOption()) {
             case NOTING:
-                break;
+                return line;
             case INSERT:
             case REPLACE:
                 if (line.isModule()) {
@@ -20,13 +17,10 @@ public class ReadMeExpert {
                 }
                 break;
         }
-
-        createReadMeLine(new AdornCommand(line));
-
         return line;
     }
 
-    private static void createReadMeLine(ReadMeCommand command) {
+    public static void createReadMeLine(ReadMeCommand command) {
         command.execute();
     }
 }

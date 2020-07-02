@@ -1,13 +1,8 @@
 package red.medusa.readme.model;
 
-import red.medusa.readme.utils.PathUtils;
-
-public class Line implements Comparable<Line> {
+public class Line {
     private static int num;
-    private int order = 0;
-    private Integer readMeOrder;
-    private int moduleOrder = 0;
-    private int selfNum = 0;
+    private int selfNum = -1;
     private String moduleName;
     private String methodName;
     private String line = "";
@@ -18,10 +13,6 @@ public class Line implements Comparable<Line> {
     private String location;
     private String locationTitle;
     private String moduleMsg;
-    private String methodUsage;
-    private boolean isAnnotation;
-    private Line annotation;
-    private Line pre;
     private NewLineOption option = NewLineOption.NOTING;
 
     public Line() {
@@ -32,19 +23,22 @@ public class Line implements Comparable<Line> {
         this.newLine = newLine;
     }
 
+    public Line(String moduleName, String methodName, String newLine, String location, String locationTitle, String moduleMsg, int moduleLevel, int listLevel) {
+        this.setModuleName(moduleName).setMethodName(methodName).setNewLine(newLine).setLocation(location).setLocationTitle(locationTitle)
+                .setModuleLevel(moduleLevel).setListLevel(listLevel).setModuleMsg(moduleMsg);
+    }
+
     public Line modifyWithOldLine(Line param) {
 
-        this.setOrder(param.getOrder());
-        this.setModuleOrder(param.getModuleOrder());
         this.setModuleName(param.getModuleName());
         this.setMethodName(param.getMethodName());
+        this.setNewLine(param.getNewLine());
         this.setModule(param.isModule());
         this.setModuleLevel(param.getModuleLevel());
         this.setLocation(param.getLocation());
         this.setLocationTitle(param.getLocationTitle());
         this.setListLevel(param.getListLevel());
         this.setModuleMsg(param.getModuleMsg());
-        this.setMethodUsage(param.getMethodUsage());
 
         return this;
 
@@ -154,84 +148,24 @@ public class Line implements Comparable<Line> {
         return this;
     }
 
+    public Line subNum() {
+        selfNum = --num;
+        return this;
+    }
+
     public int getSelfNum() {
+        if (this.selfNum == -1)
+            return num;
         return selfNum;
     }
 
     public Line setSelfNum(int selfNum) {
-        this.selfNum = selfNum;
-        return this;
-    }
-
-    public Integer getReadMeOrder() {
-        return readMeOrder;
-    }
-
-    public Line setReadMeOrder(Integer readMeOrder) {
-        this.readMeOrder = readMeOrder;
-        return this;
-    }
-
-    public int getOrder() {
-        if (!this.isAnnotation() && this.getAnnotation() != null) {
-            return this.getAnnotation().getOrder();
+        if (selfNum != -1) {
+            this.selfNum = selfNum;
         }
-        return order;
-    }
-
-    public Line setOrder(int order) {
-        if (order >= 0)
-            this.order = order;
         return this;
     }
 
-    public boolean isAnnotation() {
-        return isAnnotation;
-    }
-
-    public void setAnnotation(boolean annotation) {
-        isAnnotation = annotation;
-    }
-
-    public Line getAnnotation() {
-        return annotation;
-    }
-
-    public Line setAnnotation(Line annotation) {
-        this.annotation = annotation;
-        return this;
-    }
-
-    public Line getPre() {
-        return pre;
-    }
-
-    public Line setPre(Line pre) {
-        this.pre = pre;
-        return this;
-    }
-
-    public String getMethodUsage() {
-        return methodUsage;
-    }
-
-    public Line setMethodUsage(String methodUsage) {
-        this.methodUsage = methodUsage;
-        return this;
-    }
-
-    public int getModuleOrder() {
-        return moduleOrder;
-    }
-
-    public Line setModuleOrder(int moduleOrder) {
-        this.moduleOrder = moduleOrder;
-        return this;
-    }
-
-    public boolean isBlank() {
-        return PathUtils.isEmpty(this.getNewLine());
-    }
 
     @Override
     public String toString() {
@@ -245,18 +179,9 @@ public class Line implements Comparable<Line> {
                 ", moduleLevel=" + moduleLevel +
                 ", listLevel=" + listLevel +
                 ", location='" + location + '\'' +
-                ", order='" + order + '\'' +
-                ", moduleOrder='" + moduleOrder + '\'' +
-                ", isAnnotation='" + isAnnotation + '\'' +
                 ", locationTitle='" + locationTitle + '\'' +
                 ", moduleMsg='" + moduleMsg + '\'' +
-                ", methodUsage='" + methodUsage + '\'' +
                 ", option=" + option +
                 '}';
-    }
-
-    @Override
-    public int compareTo(Line o) {
-        return this.getOrder() - o.getOrder();
     }
 }

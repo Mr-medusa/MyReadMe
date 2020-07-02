@@ -3,9 +3,8 @@ package red.medusa.readme;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import red.medusa.readme.model.ReadMeFlag;
+import org.springframework.util.ClassUtils;
 import red.medusa.readme.model.ReadMeParam;
-import red.medusa.readme.utils.PathUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +24,7 @@ public class AttachReadme {
         // 获得当前目录
         Path basePath = Paths.get("", "src/main/java/");
         // 当前类的目录
-        Path childPath = Paths.get(PathUtils.classPackageAsResourcePath(that));
+        Path childPath = Paths.get(ClassUtils.classPackageAsResourcePath(that));
         // 当前类的全路径
         Path fullPath = basePath.resolve(childPath);
 
@@ -49,7 +48,7 @@ public class AttachReadme {
             README = new File(readMePath.resolve(Paths.get("README.md")).toUri());
         } else {
             try {
-                // 就在当前目录下创建吧
+                // 就在当前类下创建吧
                 Path directory = Files.createDirectory(basePath.resolve(childPath).resolve("readme"));
                 README = new File(directory.resolve("README.md").toUri());
             } catch (IOException e) {
@@ -84,6 +83,10 @@ public class AttachReadme {
     private static ReadMeParam findReadMe() {
 
         ClassReadMe classReadMe = that.getAnnotation(ClassReadMe.class);
+
+        if (that == null || classReadMe == null || classReadMe.flag() == ReadMeFlag.DONE) {
+            return null;
+        }
 
         ReadMeParam param = new ReadMeParam();
         ArrayList<ReadMeParam.ReadMeMethod> readMeSet = new ArrayList<>(8);
@@ -123,11 +126,7 @@ public class AttachReadme {
             Optional<Class<?>> oC = context.getTestClass();
             if (oC.isPresent()) {
                 that = oC.get();
-                ClassReadMe classReadMe = that.getAnnotation(ClassReadMe.class);
-                if (!(that == null || classReadMe == null || classReadMe.flag() == ReadMeFlag.DONE)) {
-                    buildReadMe();
-                }
-
+                buildReadMe();
             }
         }
 

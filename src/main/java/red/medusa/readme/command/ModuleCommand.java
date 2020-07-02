@@ -18,7 +18,7 @@ public class ModuleCommand extends ReadMeCommand {
             sb.append("#");
         }
         sb.append(BLANK_SPACE).append("[").append(this.line.getModuleName()).append("]");
-        sb.append("(").append(this.line.getLocation()).append(BLANK_SPACE).append("\"").append(this.line.getLocationTitle()).append("\"").append(")");
+        sb.append("(").append(this.line.getLocation()).append(BLANK_SPACE).append("\"").append(this.line.getModuleMsg()).append("\"").append(")");
         sb.append(BLANK_SPACE).append(":").append(BLANK_SPACE);
         sb.append(this.line.getModuleMsg());
         this.line.setNewLine(sb.toString());
