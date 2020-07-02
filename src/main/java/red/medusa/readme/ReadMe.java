@@ -12,12 +12,14 @@ import java.lang.annotation.Target;
 @Test
 public @interface ReadMe {
 
+    // 等价于locTit
     String value() default "";
 
     String locTit() default "";
 
-    int order() default -1;
+    int order() default 0;
 
     int listLevel() default 0;
 
+    String usage() default "";
 }

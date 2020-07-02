@@ -10,7 +10,7 @@ public class ReadMeExpert {
 
         switch (line.getOption()) {
             case NOTING:
-                return line;
+                break;
             case INSERT:
             case REPLACE:
                 if (line.isModule()) {
@@ -20,10 +20,13 @@ public class ReadMeExpert {
                 }
                 break;
         }
+
+        createReadMeLine(new AdornCommand(line));
+
         return line;
     }
 
-    public static void createReadMeLine(ReadMeCommand command) {
+    private static void createReadMeLine(ReadMeCommand command) {
         command.execute();
     }
 }

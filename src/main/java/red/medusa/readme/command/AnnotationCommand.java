@@ -33,27 +33,32 @@ public class AnnotationCommand extends ReadMeCommand {
         if (pre != null) {
             if (isAnnotation(pre.getLine())) {
                 findTags(pre.getLine());
+                // 若前面是当前行的注解
                 if (isSameModule(line)) {
-                    // 更新pre
+                    // 且该行需要更新 则更新注解
                     if (line.getOption() == NewLineOption.REPLACE) {
                         pre.modifyWithOldLine(line);
+                        // 设置新注解
+                        updateAnnotation(pre);
                     }
                     line.setAnnotation(pre);
                 }
             } else {
+                // 为当前行生成新的注解
                 createAnnotationWithAdd(line);
             }
-        }else{
+        } else {
+            // 前面没有注解也生成一个
             createAnnotationWithAdd(line);
         }
     }
 
     public static boolean isAnnotation(String line) {
-        return matchAnnotation.matcher(line).matches();
+        return line != null && matchAnnotation.matcher(line).matches();
     }
 
-    private boolean isSameModule(Line line) {
-        return line.getModuleName().equals(tags.get("module_name"));
+    private static boolean isSameModule(Line line) {
+        return !(tags.get("module_name") == null || line.getModuleName() == null) && line.getModuleName().equals(tags.get("module_name"));
     }
 
     // 当前line是注解
@@ -64,6 +69,7 @@ public class AnnotationCommand extends ReadMeCommand {
         StringBuilder sb = new StringBuilder();
         sb.append("<!-- ");
         sb.append(" order = \"").append(readMeLine.getOrder()).append("\" ");
+        sb.append(" module_order = \"").append(readMeLine.getModuleOrder()).append("\" ");
         sb.append(" is_module = \"").append(readMeLine.isModule() ? "true" : "false").append("\" ");
         sb.append(" module_name = \"").append(readMeLine.getModuleName()).append("\" ");
         sb.append(" method_name = \"").append(readMeLine.getMethodName()).append("\" ");
@@ -74,29 +80,28 @@ public class AnnotationCommand extends ReadMeCommand {
         annonLine.setLine(sb.toString());
         annonLine.setNewLine(sb.toString());
 
-        line.setAnnotation(annonLine);
+        readMeLine.setAnnotation(annonLine);
 
         return annonLine;
     }
 
-    public static void recoveryLine(Line readMeLine) {
-        findTags(readMeLine.getLine());
-        String order = tags.getOrDefault("order", "100");
-        String isModule = tags.getOrDefault("is_module", "false");
-        String moduleName = tags.getOrDefault("module_name", "\u0020");
-        String methodName = tags.getOrDefault("method_name", "\u0020");
-        String methodLevel = tags.getOrDefault("method_Level", "3");
-        String moduleLevel = tags.getOrDefault("module_Level", "3");
+    private void updateAnnotation(Line annoLine) {
 
-        readMeLine.setOrder(Integer.valueOf(order.trim()));
-        readMeLine.setModuleName(moduleName.trim());
-        readMeLine.setModule(isModule.trim().equals("true"));
-        readMeLine.setMethodName(methodName.trim());
-        readMeLine.setListLevel(Integer.valueOf(methodLevel.trim()));
-        readMeLine.setModuleLevel(Integer.valueOf(moduleLevel.trim()));
+        StringBuilder sb = new StringBuilder();
+        sb.append("<!-- ");
+        sb.append(" order = \"").append(annoLine.getOrder()).append("\" ");
+        sb.append(" module_order = \"").append(annoLine.getModuleOrder()).append("\" ");
+        sb.append(" is_module = \"").append(annoLine.isModule() ? "true" : "false").append("\" ");
+        sb.append(" module_name = \"").append(annoLine.getModuleName()).append("\" ");
+        sb.append(" method_name = \"").append(annoLine.getMethodName()).append("\" ");
+        sb.append(" module_Level = \"").append(annoLine.getModuleLevel()).append("\" ");
+        sb.append(" method_Level = \"").append(annoLine.getModuleLevel()).append("\" ");
+        sb.append(" -->");
+
+        annoLine.setNewLine(sb.toString());
     }
 
-    static Map<String, String> findTags(String line) {
+    public static Map<String, String> findTags(String line) {
         if (line.matches(CHECK_TAG)) {
             Matcher matcher = MATCH_TAG.matcher(line);
             while (matcher.find()) {

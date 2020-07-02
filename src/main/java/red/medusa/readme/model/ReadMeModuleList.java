@@ -4,62 +4,50 @@ import java.util.*;
 
 public class ReadMeModuleList implements Iterable<ReadMeModule> {
 
-    private LinkedList<ReadMeModule> moduleList = new LinkedList<>();
-
     private Map<String, ReadMeModule> moduleMap = new LinkedHashMap<>(8);
 
-    private static class SingletonClassInstance{
-        private static final ReadMeModuleList instance=new ReadMeModuleList();
+    private static class SingletonClassInstance {
+        private static final ReadMeModuleList instance = new ReadMeModuleList();
     }
 
-    public static ReadMeModuleList getInstance(){
+    public static ReadMeModuleList getInstance() {
         return SingletonClassInstance.instance;
     }
 
     private ReadMeModuleList() {
-        this.addModule(new ReadMeModule(MarkDownTag.SEPARATOR,false));
+        ReadMeModule readMeModule = new ReadMeModule(MarkDownTag.SEPARATOR);
+        this.moduleMap.put(readMeModule.getModuleName(), readMeModule);
     }
 
-    public ReadMeModuleList addModule(ReadMeModule module) {
-        this.moduleList.add(module);
-        this.moduleMap.put(module.getModuleName(), module);
-        return this;
-    }
-
-    public ReadMeModuleList removeModule(ReadMeModule module) {
-        this.moduleList.remove(module);
-        this.moduleMap.remove(module.getModuleName());
-        return this;
-    }
-
-    public ReadMeModuleList addLine(ReadMeModule module, Line line) {
-        moduleMap.computeIfAbsent(module.getModuleName(), k ->         // 若找不到使用默认的
-                moduleMap.computeIfAbsent(MarkDownTag.SEPARATOR, ReadMeModule::new))
-                .getLines().add(line);
-        return this;
-    }
-
-    public void shift(ReadMeModule module, int order) {
-        moduleList.remove(module);
-        if (order > 0 && order <= moduleList.size()) {
-            moduleList.add(order - 1, module);
-        } else if (!moduleList.contains(module)) {
-            moduleList.add(module);
-        }
-    }
-
-    public ReadMeModule get(ReadMeModule module) {
-        return moduleMap.computeIfAbsent(module.getModuleName(), k -> new ReadMeModule(module.getModuleName()));
+    public ReadMeModule getOrPutWhenNotFind(ReadMeModule module) {
+        return moduleMap.computeIfAbsent(module.getModuleName(), k -> module);
     }
 
     public int size() {
-        return moduleList.size();
+        return moduleMap.size();
     }
 
     @Override
     public Iterator<ReadMeModule> iterator() {
-        return moduleList.iterator();
+        return moduleMap.values().iterator();
     }
 
+    public Collection<ReadMeModule> list() {
+        return moduleMap.values();
+    }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        Set<Map.Entry<String, ReadMeModule>> entries = this.moduleMap.entrySet();
+        for (Map.Entry<String, ReadMeModule> entry : entries) {
+            sb.append("\n").append(entry.getKey()).append(" => [\n");
+            for (Line line : entry.getValue().getLines()) {
+                sb.append(line.getPre()).append("\n");
+                sb.append(line).append("\n");
+            }
+            sb.append("]");
+        }
+        return sb.toString();
+    }
 }

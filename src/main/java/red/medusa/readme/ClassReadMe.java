@@ -14,13 +14,13 @@ public @interface ClassReadMe {
     // 信息
     String msg() default "";
 
+    // 等价于msg
     String value() default "";
 
     // 模块级别
     int moduleLevel() default 3;
 
-    // 第一位位置从0开始计算
-    int order() default -1;
+    int order() default 0;
 
     // 默认解析
     ReadMeFlag flag() default ReadMeFlag.PROCESS;
