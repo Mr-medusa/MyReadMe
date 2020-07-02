@@ -10,11 +10,10 @@ import java.util.regex.Pattern;
 
 public class AnnotationCommand extends ReadMeCommand {
     // 匹配注释
-    public static Pattern matchAnnotation = Pattern.compile("^\\u0020*<!--\\u0020+.+\\u0020+-->\\u0020*$");
+    private static Pattern matchAnnotation = Pattern.compile("^\\u0020*<!--\\u0020+.+\\u0020+-->\\u0020*$");
 
     // 找到注解数据
-    public static Pattern MATCH_TAG = Pattern.compile("(\\w+)\\u0020?=\\u0020?\"(\\w+)\"");
-    public static String CHECK_TAG = "^\\u0020*<!-- .+-->$";
+    private static Pattern MATCH_TAG = Pattern.compile("(\\w+)\\u0020?=\\u0020?\"(\\w+)\"");
 
     private static Map<String, String> tags = new HashMap<>();
 
@@ -102,6 +101,7 @@ public class AnnotationCommand extends ReadMeCommand {
     }
 
     public static Map<String, String> findTags(String line) {
+        String CHECK_TAG = "^\\u0020*<!-- .+-->$";
         if (line.matches(CHECK_TAG)) {
             Matcher matcher = MATCH_TAG.matcher(line);
             while (matcher.find()) {

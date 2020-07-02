@@ -4,6 +4,11 @@
 <!--  order = "0"  module_order = "0"  is_module = "false"  module_name = "ReadMeTestModule2"  method_name = "test1"  module_Level = "3"  method_Level = "3"  -->
 + [test1](../ReadMeTestModule2.java "") : test1
 
+<!--  order = "0"  module_order = "1"  is_module = "true"  module_name = "ReadMeTestModule5"  method_name = "null"  module_Level = "3"  method_Level = "3"  -->
+### [ReadMeTestModule5](../sub/sub/ReadMeTestModule5.java "ReadMeTestModule5") : ReadMeTestModule
+<!--  order = "0"  module_order = "0"  is_module = "false"  module_name = "ReadMeTestModule5"  method_name = "test5"  module_Level = "3"  method_Level = "3"  -->
++ [test5](../sub/sub/ReadMeTestModule5.java "") : test5
+
 <!--  order = "0"  module_order = "2"  is_module = "true"  module_name = "ReadMeTestModule4"  method_name = "null"  module_Level = "3"  method_Level = "3"  -->
 ### [ReadMeTestModule4](../sub/ReadMeTestModule4.java "ReadMeTestModule4") : ReadMeTestModule4
 <!--  order = "0"  module_order = "0"  is_module = "false"  module_name = "ReadMeTestModule4"  method_name = "test3"  module_Level = "3"  method_Level = "3"  -->
