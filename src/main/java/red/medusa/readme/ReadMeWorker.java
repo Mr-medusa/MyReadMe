@@ -9,7 +9,9 @@ import red.medusa.readme.utils.PathUtils;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -198,7 +200,7 @@ public class ReadMeWorker {
     }
 
     /**
-     * @param line - 方法中的Line
+     * @param line    - 方法中的Line
      * @param modules - Modules
      */
     private void markLine(Line line, List<Line> modules) {
@@ -301,11 +303,9 @@ public class ReadMeWorker {
 
     private List<Line> sortLines() {
         List<Line> lines = new ArrayList<>();
-        List<ReadMeModule> modules = moduleList.list().stream().sorted().collect(Collectors.toList());
-        for (ReadMeModule module : modules) {
-            module.getLines().sort(Comparator.comparingInt(Line::getOrder));
-            lines.addAll(module.getLines());
-        }
+        moduleList.list().stream().sorted().map(ReadMeModule::getLines).forEach(
+                ms -> lines.addAll(ms.stream().sorted().collect(Collectors.toList()))
+        );
         return lines;
     }
 
