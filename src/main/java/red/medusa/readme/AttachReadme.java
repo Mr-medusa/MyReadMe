@@ -1,6 +1,6 @@
 package red.medusa.readme;
 
-import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import red.medusa.readme.model.ReadMeFlag;
@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Optional;
 
-@ExtendWith({AttachReadme.ReadMeBeforeAllCallback.class})
+@ExtendWith({AttachReadme.ReadMeCallback.class})
 public class AttachReadme {
 
     private static Class<?> that;
@@ -117,9 +117,9 @@ public class AttachReadme {
         return null;
     }
 
-    protected static class ReadMeBeforeAllCallback implements BeforeAllCallback {
+    protected static class ReadMeCallback implements AfterAllCallback {
         @Override
-        public void beforeAll(ExtensionContext context) {
+        public void afterAll(ExtensionContext context) {
             Optional<Class<?>> oC = context.getTestClass();
             if (oC.isPresent()) {
                 that = oC.get();
@@ -130,7 +130,6 @@ public class AttachReadme {
 
             }
         }
-
     }
 
 }
