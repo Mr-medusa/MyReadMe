@@ -312,10 +312,10 @@ public class ReadMeWorker {
 
     public ReadMeWorker(ReadMeParam readMeParam) {
         this.readMeParam = readMeParam;
-        execute();
+        work();
     }
 
-    private void execute() {
+    private void work() {
         // 准备参数
         preparedParams();
         // 建立数据集
