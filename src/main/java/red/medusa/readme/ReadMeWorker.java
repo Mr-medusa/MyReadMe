@@ -26,12 +26,12 @@ public class ReadMeWorker {
     private ReadMeModuleList moduleList = ReadMeModuleList.getInstance();
 
     // 匹配文件中的模块名
-    private static Pattern matchNameCompile = Pattern.compile("^#{1,5}\\u0020+.*$");
+    private static Pattern matchNameCompile = Pattern.compile("^#{1,5}\\u0020+.*");
 
     // 匹配简单的模块名 (为了方便以文件路径当作模块名)
     private static Pattern matchLocationCompile = Pattern.compile("^#{1,5}\\u0020\\[[\\w.]+]\\(([\\w./\\\\]+)\\u0020+.*\\)");
 
-    private static Pattern matchMethodNameCompile = Pattern.compile("^\\u0020*[+]\\u0020\\[([\\w.]+)].+$");
+    private static Pattern matchMethodNameCompile = Pattern.compile("^\\u0020*[+\\d\\.]{1,2}\\u0020\\[([\\w.]+)].+$");
 
     private String relativePath = "";
 
@@ -94,13 +94,15 @@ public class ReadMeWorker {
         ReadMeModule moduleKey = new ReadMeModule(MarkDownTag.SEPARATOR);
 
         try {
-
-            Line pre = null;
             String moduleName = "";
             String locationName = "";
             for (String line : Files.lines(readMeParam.getREADME().toPath(), Charset.forName("UTF-8")).collect(Collectors.toList())) {
 
-                Line readMeLine = new Line(line, line).plusNum();
+                String[] lines = line.split("<!-- ");
+                Line readMeLine = new Line(lines[0], lines[0]).plusNum();
+                Line annotationLine = null;
+                if (lines.length == 2)
+                    annotationLine = new Line("<!-- " + lines[1], "<!-- " + lines[1]).plusNum();
 
                 if (matchNameCompile.matcher(line).matches()) {
                     // 是模块
@@ -127,16 +129,14 @@ public class ReadMeWorker {
                     }
                 }
 
-                boolean isAnnotation = AnnotationCommand.isAnnotation(readMeLine.getLine());
-                if (isAnnotation) {
-                    recoveryLine(readMeLine);
-                    readMeLine.setAnnotation(true);
+                if (lines.length == 2 && AnnotationCommand.isAnnotation(annotationLine.getLine())) {
+                    recoveryLine(annotationLine);
+                    annotationLine.setAnnotation(true);
+                    readMeLine.setPre(annotationLine);
+                    moduleKey.addLine(readMeLine);
                 } else if (!PathUtils.isEmpty(line)) {   // 这里排除空行
                     moduleKey.addLine(readMeLine);
                 }
-
-                readMeLine.setPre(pre);
-                pre = readMeLine;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -279,9 +279,10 @@ public class ReadMeWorker {
 
                 printPrettyModule(p, line);
 
+                p.print(line.getNewLine());
+
                 if (line.getAnnotation() != null)
-                    p.println(line.getAnnotation().getNewLine());
-                p.println(line.getNewLine());
+                    p.println(" " + line.getAnnotation().getNewLine());
             }
         } catch (
                 IOException e) {
