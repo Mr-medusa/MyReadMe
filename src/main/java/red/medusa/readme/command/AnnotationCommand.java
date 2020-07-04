@@ -17,12 +17,8 @@ public class AnnotationCommand extends ReadMeCommand {
 
     private static Map<String, String> tags = new HashMap<>();
 
-    public AnnotationCommand(Line line) {
-        super(line);
-    }
-
     @Override
-    public void execute() {
+    public void execute(Line line) {
         Line pre = line.getPre();
 
         boolean currentIsAnnotation = isAnnotation(line.getLine());

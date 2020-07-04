@@ -3,10 +3,14 @@ package red.medusa.readme.command;
 import red.medusa.readme.model.Line;
 
 public class ReadMeExpert {
+    private static ReadMeCommand annotationCommand = new AnnotationCommand();
+    private static ReadMeCommand moduleCommand = new ModuleCommand();
+    private static ReadMeCommand linkCommand = new LinkCommand();
+    private static ReadMeCommand adornCommand = new AdornCommand();
 
     public static Line build(Line line) {
 
-        createReadMeLine(new AnnotationCommand(line));
+        createReadMeLine(annotationCommand, line);
 
         switch (line.getOption()) {
             case NOTING:
@@ -14,19 +18,19 @@ public class ReadMeExpert {
             case INSERT:
             case REPLACE:
                 if (line.isModule()) {
-                    createReadMeLine(new ModuleCommand(line));
+                    createReadMeLine(moduleCommand, line);
                 } else {
-                    createReadMeLine(new LinkCommand(line));
+                    createReadMeLine(linkCommand,line);
                 }
                 break;
         }
 
-        createReadMeLine(new AdornCommand(line));
+        createReadMeLine(adornCommand,line);
 
         return line;
     }
 
-    private static void createReadMeLine(ReadMeCommand command) {
-        command.execute();
+    private static void createReadMeLine(ReadMeCommand command,Line line) {
+        command.execute(line);
     }
 }
