@@ -12,7 +12,7 @@ public class ReadMeTestModule4 extends AttachReadme {
 
     }
 
-    @ReadMe(value = "test2", locTit = "BBB", order = 1)
+    @ReadMe(value = "test2", locTit = "BBB", order = 12)
     public void test2() {
 
     }
