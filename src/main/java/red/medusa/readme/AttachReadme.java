@@ -21,7 +21,7 @@ public class AttachReadme {
 
     private static Class<?> that;
 
-    public static void buildReadMe() {
+    public static void buildReadMe(ClassReadMe classReadMe) {
         // 获得当前目录
         Path basePath = Paths.get("", "src/main/java/");
         // 当前类的目录
@@ -33,6 +33,7 @@ public class AttachReadme {
 
         Path readMePath;
 
+        // 查找readme目录
         while ((readMePath = findReadMeFile(fullPath)) == null) {
             // 这里是边界  src/main/java/red/medusa
             if (fullPath.getNameCount() - basePathNameCount > 3) {
@@ -43,20 +44,27 @@ public class AttachReadme {
             }
         }
 
+        // 文件名
+        String fileName = "README.md";
+        if (classReadMe.split()) {
+            fileName = that.getSimpleName() + "_" + fileName;
+        }
+
         // 生成README
         File README = null;
         if (readMePath != null) {
-            README = new File(readMePath.resolve(Paths.get("README.md")).toUri());
+            README = new File(readMePath.resolve(Paths.get(fileName)).toUri());
         } else {
             try {
                 // 就在当前目录下创建吧
                 Path directory = Files.createDirectory(basePath.resolve(childPath).resolve("readme"));
-                README = new File(directory.resolve("README.md").toUri());
+                README = new File(directory.resolve(fileName).toUri());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
+        System.out.println(README.getAbsolutePath());
         if (!README.exists()) {
             try {
                 README.createNewFile();
@@ -125,7 +133,7 @@ public class AttachReadme {
                 that = oC.get();
                 ClassReadMe classReadMe = that.getAnnotation(ClassReadMe.class);
                 if (!(that == null || classReadMe == null || classReadMe.flag() == ReadMeFlag.DONE)) {
-                    buildReadMe();
+                    buildReadMe(classReadMe);
                 }
 
             }
