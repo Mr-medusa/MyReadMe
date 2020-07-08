@@ -24,4 +24,6 @@ public @interface ClassReadMe {
 
     // 默认解析
     ReadMeFlag flag() default ReadMeFlag.PROCESS;
+
+    boolean split() default false;
 }
