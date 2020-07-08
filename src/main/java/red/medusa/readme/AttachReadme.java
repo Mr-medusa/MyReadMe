@@ -64,7 +64,6 @@ public class AttachReadme {
             }
         }
 
-        System.out.println(README.getAbsolutePath());
         if (!README.exists()) {
             try {
                 README.createNewFile();
