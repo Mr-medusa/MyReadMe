@@ -22,6 +22,7 @@ public class Line implements Comparable<Line> {
     private boolean isAnnotation;
     private Line annotation;
     private Line pre;
+    private int separator = 0;
     private NewLineOption option = NewLineOption.NOTING;
 
     public Line() {
@@ -45,6 +46,7 @@ public class Line implements Comparable<Line> {
         this.setListLevel(param.getListLevel());
         this.setModuleMsg(param.getModuleMsg());
         this.setMethodUsage(param.getMethodUsage());
+        this.setSeparator(param.getSeparator());
 
         return this;
 
@@ -110,6 +112,15 @@ public class Line implements Comparable<Line> {
 
     public Line setOption(NewLineOption option) {
         this.option = option;
+        return this;
+    }
+
+    public int getSeparator() {
+        return separator;
+    }
+
+    public Line setSeparator(int separator) {
+        this.separator = separator;
         return this;
     }
 

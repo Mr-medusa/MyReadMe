@@ -27,4 +27,12 @@ public @interface ClassReadMe {
 
     // 拆分文件
     boolean split() default false;
+
+    // 指定组
+    Class<?> group() default Object.class;
+
+    // 与group互斥
+    // 明确指定组名
+    String groupName() default "";
+
 }

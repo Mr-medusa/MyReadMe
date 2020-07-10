@@ -21,5 +21,8 @@ public @interface ReadMe {
 
     int listLevel() default 0;
 
+    // 0:不分割  1:上分割  2:下分割 3: 上下分割
+    int separator() default 0;
+
     String usage() default "";
 }

@@ -79,6 +79,7 @@ public class ReadMeWorker {
                             .setLocation(relativePath)
                             .setLocationTitle(readMe.locTit())
                             .setListLevel(readMe.listLevel())
+                            .setSeparator(readMe.separator())
 
             );
         }
@@ -97,6 +98,9 @@ public class ReadMeWorker {
             String moduleName = "";
             String locationName = "";
             for (String line : Files.lines(readMeParam.getREADME().toPath(), Charset.forName("UTF-8")).collect(Collectors.toList())) {
+                // continue
+                if(line.trim().equals("---"))
+                    continue;
 
                 String[] lines = line.split("<!-- ");
                 Line readMeLine = new Line(lines[0], lines[0]).plusNum();
@@ -158,6 +162,7 @@ public class ReadMeWorker {
         String methodName = tags.getOrDefault("method_name", "\u0020");
         String methodLevel = tags.getOrDefault("method_Level", "3");
         String moduleLevel = tags.getOrDefault("module_Level", "3");
+        String separator = tags.getOrDefault("separator", "0");
 
         readMeLine.setOrder(Integer.valueOf(order.trim()));
         readMeLine.setModuleOrder(Integer.valueOf(moduleOrder.trim()));
@@ -167,6 +172,9 @@ public class ReadMeWorker {
         readMeLine.setMethodName(methodName.trim());
         readMeLine.setListLevel(Integer.valueOf(methodLevel.trim()));
         readMeLine.setModuleLevel(Integer.valueOf(moduleLevel.trim()));
+        try{
+            readMeLine.setSeparator(Integer.valueOf(separator));
+        }catch (NumberFormatException e){}
     }
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -277,12 +285,16 @@ public class ReadMeWorker {
         )) {
             for (Line line : lines) {
 
+                printSeparatorTop(p,line);
+
                 printPrettyModule(p, line);
 
                 p.print(line.getNewLine());
 
                 if (line.getAnnotation() != null)
                     p.println(" " + line.getAnnotation().getNewLine());
+
+                printSeparatorBottom(p,line);
             }
         } catch (
                 IOException e) {
@@ -290,7 +302,8 @@ public class ReadMeWorker {
         }
 
     }
-
+    // ------- 添加一些样式 -------
+    //------------------------------------------------------------------------------------
     private void printPrettyModule(PrintWriter p, Line line) {
         if (line != null && line.isModule()) {
             if (line.getAnnotation() != null && line.getAnnotation().getPre() != null && line.getAnnotation().getPre().isBlank()) {
@@ -301,6 +314,15 @@ public class ReadMeWorker {
             }
         }
     }
+    private void printSeparatorTop(PrintWriter p, Line line) {
+        if(line.getSeparator() == 1 || line.getSeparator() == 3)
+            p.println("---");
+    }
+    private void printSeparatorBottom(PrintWriter p, Line line) {
+        if(line.getSeparator() == 2 || line.getSeparator() == 3)
+            p.println("---");
+    }
+    //------------------------------------------------------------------------------------
 
     private List<Line> sortLines() {
         List<Line> lines = new ArrayList<>();

@@ -70,6 +70,7 @@ public class AnnotationCommand extends ReadMeCommand {
         sb.append(" method_name = \"").append(readMeLine.getMethodName()).append("\" ");
         sb.append(" module_Level = \"").append(readMeLine.getModuleLevel()).append("\" ");
         sb.append(" method_Level = \"").append(readMeLine.getModuleLevel()).append("\" ");
+        sb.append(" separator = \"").append(readMeLine.getSeparator()).append("\" ");
         sb.append(" -->");
 
         annonLine.setLine(sb.toString());
@@ -91,6 +92,7 @@ public class AnnotationCommand extends ReadMeCommand {
         sb.append(" method_name = \"").append(annoLine.getMethodName()).append("\" ");
         sb.append(" module_Level = \"").append(annoLine.getModuleLevel()).append("\" ");
         sb.append(" method_Level = \"").append(annoLine.getModuleLevel()).append("\" ");
+        sb.append(" separator = \"").append(annoLine.getSeparator()).append("\" ");
         sb.append(" -->");
 
         annoLine.setNewLine(sb.toString());

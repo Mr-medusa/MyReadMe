@@ -45,10 +45,21 @@ public class AttachReadme {
         }
 
         // 文件名
+        //------------------------------------------------------------------------------------
         String fileName = "README.md";
         if (classReadMe.split()) {
             fileName = that.getSimpleName() + "_" + fileName;
         }
+        // 或者手动指定
+        Class<?> group = classReadMe.group();
+        if (group != Object.class) {
+            fileName = group.getSimpleName() + "_" + fileName;
+        }
+        String groupName = classReadMe.groupName();
+        if (!"".equals(groupName.trim())) {
+            fileName = groupName + ".md";
+        }
+        //------------------------------------------------------------------------------------
 
         // 生成README
         File README = null;

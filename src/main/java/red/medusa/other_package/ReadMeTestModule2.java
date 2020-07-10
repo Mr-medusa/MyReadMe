@@ -4,7 +4,7 @@ import red.medusa.readme.AttachReadme;
 import red.medusa.readme.ClassReadMe;
 import red.medusa.readme.ReadMe;
 
-@ClassReadMe(value = "ReadMeTestModule2",msg = "二号模块")
+@ClassReadMe(value = "ReadMeTestModule2",msg = "二号模块",group = ReadMeTestModule1.class)
 public class ReadMeTestModule2 extends AttachReadme {
 
     @ReadMe(value = "test1")
